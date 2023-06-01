@@ -48,6 +48,4 @@ public class Registrar {
         BigInteger signedMessage = new BigInteger(1, mes.modPow(privateEx, module).toByteArray());
         return Utils.bytesToHexString(signedMessage.toByteArray());
     }
-
-
 }

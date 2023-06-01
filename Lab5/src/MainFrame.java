@@ -32,7 +32,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         Scanner in = new Scanner(System.in);
-        System.out.println("Введите коэффициенты");
+        System.out.println("Введите полином");
         System.out.println("Например, 1101101 плохо шифрует, а 10001 уже лучше"); //Для себя
         polynomial = toIntArray(in.nextLine());
 

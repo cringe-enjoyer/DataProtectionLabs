@@ -43,7 +43,7 @@ public class Voter {
             BigInteger multiplier = new BigInteger(1, generateRandomMultiplier(module).toByteArray());
 
             BigInteger blindMess = coverMessage(message, multiplier);
-            BigInteger signature = sendToRegistrar(blindMess, multiplier);
+            BigInteger signature = sendToRegistrar(blindMess);
             BigInteger uncoveredSignedMes = uncoverMessage(signature, multiplier);
             if (sendToCounter(messagePath, uncoveredSignedMes))
                 System.out.println("Голос засчитан");
@@ -97,7 +97,12 @@ public class Voter {
         return message.multiply(multiplier.modInverse(module)).mod(module);
     }
 
-    private static BigInteger sendToRegistrar(BigInteger message, BigInteger r) {
+    /**
+     * Отправляет регистратору
+     * @param message сообщение
+     * @return ответ от регистратора
+     */
+    private static BigInteger sendToRegistrar(BigInteger message) {
         String answer = Registrar.signCurs(Utils.bytesToHexString(message.toByteArray()), module, privateEx);
         BigInteger result = new BigInteger(1, Utils.hexStringToBytes(answer));
         return result;
