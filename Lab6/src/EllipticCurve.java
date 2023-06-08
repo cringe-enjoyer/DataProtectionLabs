@@ -28,14 +28,15 @@ public class EllipticCurve {
         this.g = g;
     }
 
-    // y^2 = x^3 + ax + b
+    // y^2 = x^3 + ax + b mod p
     public ArrayList<Point> solves() {
         ArrayList<Point> points = new ArrayList<Point>();
 
         for (BigInteger x = BigInteger.ZERO; x.compareTo(p) < 0; x = x.add(BigInteger.ONE)) {
             for (BigInteger y = BigInteger.ZERO; y.compareTo(p) < 0; y = y.add(BigInteger.ONE)) {
-                //x^3 + ax + b - y^2 = 0
-                if (((x.pow(3).add(a.multiply(x)).add(b).subtract(y.pow(2))).mod(p)).equals(BigInteger.ZERO))
+                // (x^3 + ax + b - y^2) mod p = 0
+                if (((x.pow(3).add(a.multiply(x)).add(b).subtract(y.pow(2)))
+                        .mod(p)).equals(BigInteger.ZERO))
                     points.add(new Point(x, y));
             }
         }
