@@ -1,5 +1,3 @@
-import org.jfree.data.xy.XYDataItem;
-
 import java.math.BigInteger;
 
 public class Point {
@@ -7,12 +5,6 @@ public class Point {
     public BigInteger y;
     public boolean isInfinity;
     public static final Point INFINITY = infinity(); // Она же 0 https://habr.com/ru/articles/335906/
-
-    public Point(int x, int y) {
-        this.x = BigInteger.valueOf(x);
-        this.y = BigInteger.valueOf(y);
-        this.isInfinity = false;
-    }
 
     public Point(BigInteger x, BigInteger y) {
         this.x = x;
@@ -93,7 +85,7 @@ public class Point {
     @Override
     public String toString() {
         if (isInfinity())
-            return "INFINITY";
+            return "0 точка";
         return "(" + x + ", " + y + ")";
     }
 }
