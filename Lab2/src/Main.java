@@ -13,10 +13,10 @@ public class Main {
         com.add("E:\\Git\\usr\\bin\\openssl.exe");
         com.add("dgst");
         com.add("-sha1");
-        com.add("F:\\OpenSSLLabs\\Lab2\\res\\leasing.txt");
+        com.add("F:\\OpenSSLLabs\\Labs\\DefenseLabs\\Lab2\\res\\leasing.txt");
         process.command(com);
         addInfo();
-        process.redirectOutput(new File("F:\\OpenSSLLabs\\Lab2\\res\\out.txt"));
+        process.redirectOutput(new File("F:\\OpenSSLLabs\\Labs\\DefenseLabs\\Lab2\\res\\out.txt"));
         process.start();
         String hash = getInfo();
         if (originalHash.equals(hash))
@@ -25,7 +25,7 @@ public class Main {
 
     private static String getInfo() {
         String hash = "";
-        try (FileInputStream reader = new FileInputStream("F:\\OpenSSLLabs\\Lab2\\res\\28e.bmp")) {
+        try (FileInputStream reader = new FileInputStream("F:\\OpenSSLLabs\\Labs\\DefenseLabs\\Lab2\\res\\28e.bmp")) {
             byte[] header = new byte[HEADER];
             reader.read(header);
             byte[] image = new byte[reader.available()];
@@ -55,14 +55,14 @@ public class Main {
     private static void addInfo() {
         byte[] hashAr = toByteArray(getHash());
         String hashBits = "";
-        for (byte b : hashAr) {
+        for (byte b : hashAr)
             hashBits += String.format("%8s", Integer.toBinaryString(b & 0xff)).replace(' ', '0');
-        }
+
         System.out.println(hashBits);
         char[] hashBitsCharArray = hashBits.toCharArray();
         byte[] image = new byte[0];
         byte[] header = new byte[0];
-        try (FileInputStream reader = new FileInputStream("F:\\OpenSSLLabs\\Lab2\\res\\28.bmp")) {
+        try (FileInputStream reader = new FileInputStream("F:\\OpenSSLLabs\\Labs\\DefenseLabs\\Lab2\\res\\28.bmp")) {
             header = new byte[HEADER];
             reader.read(header);
             image = new byte[reader.available()];
@@ -73,11 +73,13 @@ public class Main {
         key = createKey(image.length);
 
         for (int i = 0; i < key.size(); i++) {
-            String imageBits = Integer.toBinaryString(image[key.get(i)]);
-            image[key.get(i)] = (byte) Integer.parseUnsignedInt(imageBits
-                    .replace(imageBits.charAt(imageBits.length() - 1), hashBitsCharArray[i]), 2);
+            String imageByteBinary = String.format("%8s", Integer.toBinaryString(image[key.get(i)] & 0xFF))
+                    .replace(' ', '0'); // Записываем бинарное представление байта изображения
+            char[] imageBits = imageByteBinary.toCharArray();
+            imageBits[7] = hashBitsCharArray[i];
+            image[key.get(i)] = (byte) Integer.parseInt(new String(imageBits), 2);
         }
-        try (FileOutputStream writer = new FileOutputStream("F:\\OpenSSLLabs\\Lab2\\res\\28e.bmp")) {
+        try (FileOutputStream writer = new FileOutputStream("F:\\OpenSSLLabs\\Labs\\DefenseLabs\\Lab2\\res\\28e.bmp")) {
             writer.write(header);
             writer.write(image);
         } catch (Exception ex) {
@@ -87,7 +89,7 @@ public class Main {
 
     private static String getHash() {
         String hash = "";
-        try (var reader = new BufferedReader(new FileReader("F:\\OpenSSLLabs\\Lab2\\res\\out.txt"))) {
+        try (var reader = new BufferedReader(new FileReader("F:\\OpenSSLLabs\\Labs\\DefenseLabs\\Lab2\\res\\out.txt"))) {
             String str = reader.readLine();
             hash = str.split("=")[1];
         } catch (Exception ex) {
